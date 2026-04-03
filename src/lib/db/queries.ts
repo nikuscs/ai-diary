@@ -252,6 +252,33 @@ export async function insertEntry(params: {
   return id;
 }
 
+export async function updateEntryImage(
+  entryId: string,
+  imagePath: string,
+  prompt?: { description: string; keyElements: string[]; mood: string },
+): Promise<void> {
+  const db = await getDbReady();
+
+  const row = await db
+    .selectFrom("entries")
+    .select("content")
+    .where("id", "=", entryId)
+    .executeTakeFirst();
+
+  if (!row) return;
+
+  const content = JSON.parse(row.content) as JournalEntryContent;
+  const maxIndex = Math.max(0, content.body.length - 1);
+  const afterParagraph = Math.floor(Math.random() * maxIndex);
+
+  content.illustration = { imagePath, afterParagraph, prompt };
+  await db
+    .updateTable("entries")
+    .set({ content: JSON.stringify(content) })
+    .where("id", "=", entryId)
+    .execute();
+}
+
 export async function getConfig<T>(key: string, defaultValue: T): Promise<T> {
   const db = await getDbReady();
   const row = await db

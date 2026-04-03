@@ -1,8 +1,10 @@
 import { getAdapters } from "../adapters";
 import { capConversation } from "./capper";
 import { triageConversation, generateEntry } from "../ai/extract";
-import { isSessionScanned, insertEntry, markSessionScanned, getConfig } from "../db/queries";
-import { DEFAULT_CAPPING_CONFIG, DEFAULT_MODEL } from "../config";
+import { generateImagePrompt } from "../ai/image-prompt";
+import { generateAndSaveImage } from "../ai/image-generate";
+import { isSessionScanned, insertEntry, markSessionScanned, updateEntryImage, getConfig } from "../db/queries";
+import { DEFAULT_CAPPING_CONFIG, DEFAULT_MODEL, IMAGE_GENERATION_CHANCE } from "../config";
 import type { CappingConfig } from "./capper";
 
 export interface ScanError {
@@ -39,7 +41,12 @@ export async function scan(options?: {
     if (options?.source && adapter.name !== options.source) continue;
     if (!await adapter.isAvailable()) continue;
 
-    const allSessions = await adapter.listSessions();
+    let allSessions;
+    try {
+      allSessions = await adapter.listSessions();
+    } catch {
+      continue;
+    }
     const cutoff = options?.maxAgeDays
       ? new Date(Date.now() - options.maxAgeDays * 24 * 60 * 60 * 1000)
       : null;
@@ -51,13 +58,13 @@ export async function scan(options?: {
     for (const session of sessions) {
       if (options?.limit && result.sessionsScanned >= options.limit) break;
 
-      const hash = await adapter.getSessionHash(session.id);
-      if (await isSessionScanned(session.id, hash)) {
-        result.sessionsSkipped++;
-        continue;
-      }
-
       try {
+        const hash = await adapter.getSessionHash(session.id);
+        if (await isSessionScanned(session.id, hash)) {
+          result.sessionsSkipped++;
+          continue;
+        }
+
         const messages = await adapter.getMessages(session.id);
         if (messages.length < 2) {
           await markSessionScanned(session, hash, false, "Too few messages");
@@ -77,7 +84,7 @@ export async function scan(options?: {
 
         const { entry, meta } = await generateEntry(capped, modelId, sourceCtx);
 
-        await insertEntry({
+        const entryId = await insertEntry({
           session,
           entry: {
             title: entry.title,
@@ -95,6 +102,28 @@ export async function scan(options?: {
           triageReason: triage.reason,
         });
 
+        if (entry.stickyNote && Math.random() < IMAGE_GENERATION_CHANCE) {
+          try {
+            const imagePrompt = await generateImagePrompt({
+              title: entry.title,
+              summary: entry.summary,
+              mood: entry.mood,
+              shameScore: entry.shameScore,
+              tags: entry.tags,
+              stickyNoteText: entry.stickyNote.text,
+              topQuote: entry.keyQuotes[0]?.text,
+            });
+            const imagePath = await generateAndSaveImage(entryId, imagePrompt);
+            await updateEntryImage(entryId, imagePath, {
+              description: imagePrompt.subject.description,
+              keyElements: imagePrompt.subject.keyElements,
+              mood: imagePrompt.mood,
+            });
+          } catch {
+            // Image generation is a bonus — skip silently on failure
+          }
+        }
+
         result.entriesCreated++;
         result.sessionsScanned++;
       } catch (error) {
@@ -102,6 +131,7 @@ export async function scan(options?: {
           sessionId: session.id,
           error: error instanceof Error ? error.message : String(error),
         });
+        result.sessionsScanned++;
       }
     }
   }

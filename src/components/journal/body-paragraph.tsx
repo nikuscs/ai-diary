@@ -3,7 +3,7 @@ import type { BodyParagraph as BodyParagraphType } from "@/lib/db/schema";
 import { HandCircle } from "./hand-circle";
 import { HandStrike } from "./hand-strike";
 
-function renderInlineFormatting(text: string, path = ""): ReactNode[] {
+export function renderInlineFormatting(text: string, path = ""): ReactNode[] {
   const patterns: { regex: RegExp; render: (matched: string, reactKey: string) => ReactNode }[] = [
     {
       regex: /`([^`]+)`/,

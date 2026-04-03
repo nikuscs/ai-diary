@@ -53,8 +53,8 @@ export function ScanButton() {
   }
 
   return (
-    <Button variant="link" onClick={handleScan}>
-      <HugeiconsIcon icon={QuillWrite01Icon} size={16} />
+    <Button variant="paper" size="sm" onClick={handleScan}>
+      <HugeiconsIcon icon={QuillWrite01Icon} size={14} />
       Scan conversations
     </Button>
   );

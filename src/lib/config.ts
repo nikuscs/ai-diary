@@ -1,4 +1,4 @@
-export const DEFAULT_MODEL = process.env.JOURNAL_MODEL || "google/gemini-2.5-flash";
+export const DEFAULT_MODEL = process.env.JOURNAL_MODEL || "google/gemini-2.5-pro";
 export const DATABASE_PATH = process.env.DATABASE_PATH || "./data/journal.db";
 
 export const DEFAULT_CAPPING_CONFIG = {
@@ -12,3 +12,8 @@ export const DEFAULT_SCAN_CONFIG = {
   limit: 3,
   maxAgeDays: 7,
 } as const;
+
+export const IMAGE_GENERATION_CHANCE = 0.3;
+export const IMAGE_PROMPT_MODEL = "google/gemini-2.5-flash";
+export const IMAGE_GENERATION_MODEL = "google/gemini-2.5-flash-image";
+export const IMAGES_DIR = "./data/images";

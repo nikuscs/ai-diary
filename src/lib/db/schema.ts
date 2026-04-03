@@ -61,6 +61,15 @@ export interface JournalEntryContent {
   keyQuotes: KeyQuote[];
   stickyNote: StickyNote | null;
   annotation: Annotation | null;
+  illustration?: {
+    imagePath: string;
+    afterParagraph: number;
+    prompt?: {
+      description: string;
+      keyElements: string[];
+      mood: string;
+    };
+  } | null;
 }
 
 export interface BodyParagraph {

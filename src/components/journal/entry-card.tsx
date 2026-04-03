@@ -7,6 +7,8 @@ import { BodyParagraph } from "./body-paragraph";
 import { Annotation } from "./annotation";
 import { KeyQuote } from "./key-quote";
 import { StickyNote } from "./sticky-note";
+import { DoodleSeparator } from "./doodle-separator";
+import { Illustration } from "./illustration";
 
 
 function formatTime(date: Date) {
@@ -18,12 +20,13 @@ function formatTime(date: Date) {
   });
 }
 
-export function EntryCard({ entry }: { entry: Entry }) {
+export function EntryCard({ entry, index = 0 }: { entry: Entry; index?: number }) {
   const content = entry.content;
   const date = new Date(entry.conversationDate);
 
   return (
-    <article className="entry-card relative py-6 border-t border-stone-300/60">
+    <article className="entry-card relative py-6">
+      {index > 0 && <DoodleSeparator index={index} />}
       <div className="absolute -left-16 top-6 w-14">
         <DateColumn date={date} />
       </div>
@@ -59,6 +62,9 @@ export function EntryCard({ entry }: { entry: Entry }) {
               {content.annotation?.afterParagraph === i && (
                 <Annotation text={content.annotation.text} />
               )}
+              {content.illustration?.afterParagraph === i && (
+                <Illustration illustration={content.illustration} entryId={entry.id} />
+              )}
             </Fragment>
           ))}
         </div>
@@ -66,7 +72,7 @@ export function EntryCard({ entry }: { entry: Entry }) {
         {content.keyQuotes.length > 0 && (
           <div className="mt-4 space-y-2">
             {content.keyQuotes.map((quote, i) => (
-              <KeyQuote key={i} quote={quote} />
+              <KeyQuote key={i} quote={quote} index={i} />
             ))}
           </div>
         )}
