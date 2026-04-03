@@ -32,9 +32,9 @@ export default async function HomePage() {
         <EmptyState />
       ) : (
         <div>
-          {entries.map((entry) => (
+          {entries.map((entry, i) => (
             <Link key={entry.id} href={`/entry/${entry.id}`} className="block hover:bg-stone-50/30 -mx-2 px-2 rounded transition-colors">
-              <EntryCard entry={entry} />
+              <EntryCard entry={entry} index={i} />
             </Link>
           ))}
         </div>

@@ -28,6 +28,7 @@
   background-position-y: 8px;
 }
 
+/* Red margin line */
 .notebook-page::before {
   content: "";
   position: absolute;
@@ -37,6 +38,57 @@
   width: 2px;
   background-color: #c45a5a;
   opacity: 0.5;
+}
+
+/* 3-ring binder holes — repeating down the page */
+.notebook-page::after {
+  content: "";
+  position: absolute;
+  left: 24px;
+  top: 0;
+  bottom: 0;
+  width: 28px;
+  background-image:
+    radial-gradient(circle 10px at 14px 14px, #3e2723 9px, rgba(0,0,0,0.15) 9px, rgba(0,0,0,0.15) 10px, transparent 10px),
+    radial-gradient(circle 6px at 14px 14px, rgba(0,0,0,0.12) 6px, transparent 6px);
+  background-size: 28px 280px;
+  background-position: 0 80px;
+  background-repeat: repeat-y;
+  pointer-events: none;
+  z-index: 2;
+}
+
+/* Ink smudge near margin line */
+.ink-smudge {
+  position: absolute;
+  left: 70px;
+  width: 16px;
+  height: 8px;
+  background: radial-gradient(ellipse, rgba(140, 60, 60, 0.15) 0%, transparent 70%);
+  filter: blur(2px);
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* Coffee ring stain */
+.coffee-stain {
+  position: absolute;
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  background: radial-gradient(
+    ellipse at center,
+    transparent 38%,
+    rgba(139, 90, 43, 0.06) 40%,
+    rgba(139, 90, 43, 0.10) 45%,
+    rgba(139, 90, 43, 0.04) 50%,
+    transparent 52%,
+    transparent 58%,
+    rgba(139, 90, 43, 0.03) 60%,
+    transparent 65%
+  );
+  pointer-events: none;
+  z-index: 1;
 }
 
 .tape {
