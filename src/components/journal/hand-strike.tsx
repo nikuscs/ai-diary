@@ -27,7 +27,7 @@ export function HandStrike({ children }: { children: ReactNode }) {
     path.getBoundingClientRect();
     path.style.transition = "stroke-dashoffset 0.8s ease-in-out";
     path.style.strokeDashoffset = "0";
-    playSound("/sounds/pencil-strike.mp3", 0.15);
+    playSound("/sounds/pencil-strike.mp3", 0.9);
   }, []);
 
   const padX = 3;

@@ -27,7 +27,7 @@ export function HandCircle({ children }: { children: ReactNode }) {
     path.getBoundingClientRect();
     path.style.transition = "stroke-dashoffset 1.2s ease-in-out";
     path.style.strokeDashoffset = "0";
-    playSound("/sounds/pencil-circle.mp3", 0.15);
+    playSound("/sounds/pencil-circle.mp3", 0.9);
   }, []);
 
   const padX = 6;
