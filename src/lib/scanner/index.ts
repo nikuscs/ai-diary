@@ -39,7 +39,12 @@ export async function scan(options?: {
     if (options?.source && adapter.name !== options.source) continue;
     if (!await adapter.isAvailable()) continue;
 
-    const allSessions = await adapter.listSessions();
+    let allSessions;
+    try {
+      allSessions = await adapter.listSessions();
+    } catch {
+      continue;
+    }
     const cutoff = options?.maxAgeDays
       ? new Date(Date.now() - options.maxAgeDays * 24 * 60 * 60 * 1000)
       : null;
@@ -51,13 +56,13 @@ export async function scan(options?: {
     for (const session of sessions) {
       if (options?.limit && result.sessionsScanned >= options.limit) break;
 
-      const hash = await adapter.getSessionHash(session.id);
-      if (await isSessionScanned(session.id, hash)) {
-        result.sessionsSkipped++;
-        continue;
-      }
-
       try {
+        const hash = await adapter.getSessionHash(session.id);
+        if (await isSessionScanned(session.id, hash)) {
+          result.sessionsSkipped++;
+          continue;
+        }
+
         const messages = await adapter.getMessages(session.id);
         if (messages.length < 2) {
           await markSessionScanned(session, hash, false, "Too few messages");
@@ -102,6 +107,7 @@ export async function scan(options?: {
           sessionId: session.id,
           error: error instanceof Error ? error.message : String(error),
         });
+        result.sessionsScanned++;
       }
     }
   }
