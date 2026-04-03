@@ -18,11 +18,11 @@ export default async function HomePage() {
       <JournalHeader />
       <StatsBar />
 
-      <nav className="flex items-center gap-4 mb-6 font-[family-name:var(--font-lora)] text-sm">
+      <nav className="flex items-center gap-4 mb-6 text-sm">
         <ScanButton />
-        <Button variant="link" asChild>
+        <Button variant="paper" size="sm" asChild>
           <Link href="/settings">
-            <HugeiconsIcon icon={Settings02Icon} size={16} />
+            <HugeiconsIcon icon={Settings02Icon} size={14} />
             Settings
           </Link>
         </Button>

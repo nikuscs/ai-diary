@@ -1,4 +1,4 @@
-export const DEFAULT_MODEL = process.env.JOURNAL_MODEL || "google/gemini-2.5-flash";
+export const DEFAULT_MODEL = process.env.JOURNAL_MODEL || "google/gemini-2.5-pro";
 export const DATABASE_PATH = process.env.DATABASE_PATH || "./data/journal.db";
 
 export const DEFAULT_CAPPING_CONFIG = {

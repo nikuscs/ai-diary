@@ -66,7 +66,7 @@ export function EntryCard({ entry }: { entry: Entry }) {
         {content.keyQuotes.length > 0 && (
           <div className="mt-4 space-y-2">
             {content.keyQuotes.map((quote, i) => (
-              <KeyQuote key={i} quote={quote} />
+              <KeyQuote key={i} quote={quote} index={i} />
             ))}
           </div>
         )}

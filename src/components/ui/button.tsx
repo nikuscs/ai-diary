@@ -19,6 +19,8 @@ const buttonVariants = cva(
         destructive:
           "bg-destructive/10 text-destructive hover:bg-destructive/20 focus-visible:border-destructive/40 focus-visible:ring-destructive/20 dark:bg-destructive/20 dark:hover:bg-destructive/30 dark:focus-visible:ring-destructive/40",
         link: "text-primary underline-offset-4 hover:underline",
+        paper:
+          "paper-btn bg-amber-50/90 text-stone-700 border border-stone-400/50 shadow-[2px_2px_4px_rgba(0,0,0,0.1)] hover:shadow-[2px_3px_6px_rgba(0,0,0,0.15)] hover:bg-amber-50 active:shadow-[1px_1px_2px_rgba(0,0,0,0.08)] font-[family-name:var(--font-lora)] tracking-wide rotate-[-0.5deg] hover:rotate-[0.3deg] transition-all duration-200",
       },
       size: {
         default:

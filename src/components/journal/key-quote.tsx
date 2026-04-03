@@ -1,13 +1,26 @@
 import type { KeyQuote as KeyQuoteType } from "@/lib/db/schema";
+import { HugeiconsIcon } from "@hugeicons/react";
+import { UserIcon, Robot02Icon } from "@hugeicons/core-free-icons";
 
-export function KeyQuote({ quote }: { quote: KeyQuoteType }) {
+const ROTATIONS = ["rotate-[1.5deg]", "rotate-[-1.8deg]", "rotate-[1.2deg]"];
+
+export function KeyQuote({ quote, index = 0 }: { quote: KeyQuoteType; index?: number }) {
+  const rotation = ROTATIONS[index % ROTATIONS.length];
+  const isAssistant = quote.speaker === "assistant";
+
   return (
-    <div className="key-quote pl-4 border-l-2 border-stone-300 my-3">
-      <p className="font-mono text-sm text-stone-800 leading-relaxed">
-        <span className="font-[family-name:var(--font-caveat)] text-stone-500 text-base not-italic">{quote.speaker}:</span>{" "}
-        &ldquo;{quote.text}&rdquo;
-      </p>
-      <p className="font-[family-name:var(--font-caveat)] text-base text-amber-900 mt-1 italic">
+    <div
+      className={`paper-btn bg-white/80 border border-stone-300/50 shadow-[2px_3px_6px_rgba(0,0,0,0.08)] px-4 py-3 my-3 ${rotation} transition-all duration-200 hover:shadow-[2px_4px_10px_rgba(0,0,0,0.12)] hover:scale-[1.01]`}
+    >
+      <div className="flex items-start gap-2.5">
+        <span className="mt-0.5 text-stone-400 shrink-0">
+          <HugeiconsIcon icon={isAssistant ? Robot02Icon : UserIcon} size={14} />
+        </span>
+        <p className="font-mono text-sm text-stone-800 leading-relaxed">
+          &ldquo;{quote.text}&rdquo;
+        </p>
+      </div>
+      <p className="font-[family-name:var(--font-caveat)] text-lg text-amber-900 mt-1.5 italic ml-6">
         {quote.reaction}
       </p>
     </div>
