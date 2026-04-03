@@ -7,3 +7,8 @@ export const DEFAULT_CAPPING_CONFIG = {
   middleSample: 5,
   maxTokens: 3000,
 } as const;
+
+export const DEFAULT_SCAN_CONFIG = {
+  limit: 3,
+  maxAgeDays: 7,
+} as const;

@@ -73,16 +73,27 @@ export class CodexAdapter implements ChatAdapter {
     for (const filePath of allFiles) {
       try {
         const content = await readFile(filePath, "utf-8");
-        const firstLine = content.split("\n").find((line) => line.trim());
-        if (!firstLine) continue;
+        const lines = content.split("\n").filter((line) => line.trim());
+        if (lines.length === 0) continue;
 
-        const parsed = JSON.parse(firstLine);
+        const first = JSON.parse(lines[0]);
+        let assistantModel: string | undefined;
+
+        for (const line of lines) {
+          const parsed = JSON.parse(line);
+          if (parsed.type === "turn_context") {
+            const model = (parsed.payload as Record<string, unknown>)?.model;
+            if (typeof model === "string") { assistantModel = model; break; }
+          }
+        }
+
         sessions.push({
-          id: parsed.id || filePath,
+          id: first.id || filePath,
           source: "codex",
-          startedAt: parsed.timestamp ? new Date(parsed.timestamp) : new Date(0),
-          project: parsed.git?.repository_url,
+          startedAt: first.timestamp ? new Date(first.timestamp) : new Date(0),
+          project: first.git?.repository_url,
           filePath,
+          assistantModel,
         });
       } catch {
         continue;

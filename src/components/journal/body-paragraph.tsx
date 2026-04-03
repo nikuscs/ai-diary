@@ -1,19 +1,21 @@
 import type { ReactNode } from "react";
 import type { BodyParagraph as BodyParagraphType } from "@/lib/db/schema";
+import { HandCircle } from "./hand-circle";
+import { HandStrike } from "./hand-strike";
 
 function renderInlineFormatting(text: string, path = ""): ReactNode[] {
   const patterns: { regex: RegExp; render: (matched: string, reactKey: string) => ReactNode }[] = [
     {
       regex: /`([^`]+)`/,
-      render: (content, reactKey) => <code key={reactKey} className="font-mono text-[13px] bg-stone-200/70 text-stone-900 px-1.5 py-0.5 rounded border border-stone-300/50">{content}</code>,
+      render: (content, reactKey) => <code key={reactKey} className="font-mono text-[0.85em] text-red-800 bg-amber-100/50 px-1.5 py-0.5 rounded-sm">{content}</code>,
     },
     {
       regex: /~~(.+?)~~/,
-      render: (content, reactKey) => <span key={reactKey} className="pencil-strike">{renderInlineFormatting(content, `${reactKey}~`)}</span>,
+      render: (content, reactKey) => <HandStrike key={reactKey}>{renderInlineFormatting(content, `${reactKey}~`)}</HandStrike>,
     },
     {
       regex: /\(\((.+?)\)\)/,
-      render: (content, reactKey) => <span key={reactKey} className="border-2 border-red-700 rounded-[50%] px-1 py-0.5 inline-block">{renderInlineFormatting(content, `${reactKey}c`)}</span>,
+      render: (content, reactKey) => <HandCircle key={reactKey}>{renderInlineFormatting(content, `${reactKey}c`)}</HandCircle>,
     },
     {
       regex: /__(.+?)__/,
@@ -66,7 +68,7 @@ export function BodyParagraph({ paragraph }: { paragraph: BodyParagraphType }) {
       );
     case "code":
       return (
-        <pre className="font-mono text-[13px] bg-stone-200/60 text-stone-900 p-4 rounded border border-stone-300/40 mb-4 overflow-x-auto whitespace-pre-wrap leading-relaxed">
+        <pre className="font-mono text-[13px] text-red-900/80 bg-amber-50/80 border-l-2 border-red-800/30 pl-4 pr-4 py-3 mb-4 overflow-x-auto whitespace-pre-wrap leading-relaxed" style={{ transform: "rotate(-0.3deg)" }}>
           {paragraph.content}
         </pre>
       );

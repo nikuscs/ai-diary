@@ -14,7 +14,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const entry = await getEntryById(id);
   if (!entry) return { title: "Entry not found" };
   return {
-    title: `${entry.title} — wallofshame.ai`,
+    title: `${entry.title} | ai-diary`,
     description: entry.summary,
   };
 }

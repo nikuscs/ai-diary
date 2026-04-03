@@ -72,6 +72,18 @@
   pointer-events: none;
 }
 
+/* Hand-drawn circle — visible by default, redraws on hover/click */
+.hand-circle-path {
+  stroke-dasharray: 1000;
+  stroke-dashoffset: 0;
+}
+
+/* Hand-drawn strikethrough — visible by default, redraws on hover/click */
+.hand-strike-path {
+  stroke-dasharray: 500;
+  stroke-dashoffset: 0;
+}
+
 /* Sticky note hover effect */
 .sticky-note {
   transition: transform 0.2s ease, box-shadow 0.2s ease;

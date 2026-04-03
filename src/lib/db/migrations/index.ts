@@ -42,7 +42,8 @@ const migrations = [
           ai_response TEXT NOT NULL,
           created_at TEXT NOT NULL,
           conversation_date TEXT NOT NULL,
-          project TEXT
+          project TEXT,
+          assistant_model TEXT
         )
       `.execute(db);
 

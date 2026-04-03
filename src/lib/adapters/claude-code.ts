@@ -60,14 +60,20 @@ export class ClaudeCodeAdapter implements ChatAdapter {
         const filePath = join(projectPath, file);
 
         let startedAt = new Date(0);
+        let assistantModel: string | undefined;
         try {
           const content = await readFile(filePath, "utf-8");
-          const firstLine = content.split("\n").find((line) => line.trim());
-          if (firstLine) {
-            const parsed = JSON.parse(firstLine);
-            if (parsed.timestamp) {
+          for (const line of content.split("\n")) {
+            if (!line.trim()) continue;
+            const parsed = JSON.parse(line);
+            if (!startedAt.getTime() && parsed.timestamp) {
               startedAt = new Date(parsed.timestamp);
             }
+            if (!assistantModel && parsed.type === "assistant") {
+              const model = (parsed.message as Record<string, unknown>)?.model;
+              if (typeof model === "string") assistantModel = model;
+            }
+            if (startedAt.getTime() && assistantModel) break;
           }
         } catch {
         }
@@ -78,6 +84,7 @@ export class ClaudeCodeAdapter implements ChatAdapter {
           startedAt,
           project,
           filePath,
+          assistantModel,
         });
       }
     }

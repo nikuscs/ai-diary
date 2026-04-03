@@ -5,7 +5,7 @@ export function JournalHeader() {
         private — do not read (I mean it)
       </p>
       <h1 className="font-[family-name:var(--font-playfair)] text-6xl font-black text-stone-900 tracking-tight">
-        wallofshame<span className="text-red-800">.</span>ai
+        ai<span className="text-red-800">-</span>diary
       </h1>
       <p className="font-[family-name:var(--font-lora)] text-lg italic text-stone-700 mt-1">
         a confessional journal for one{" "}

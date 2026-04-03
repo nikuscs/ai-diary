@@ -33,6 +33,11 @@ export function EntryCard({ entry }: { entry: Entry }) {
           <div>
             <p className="font-[family-name:var(--font-lora)] text-sm text-stone-600">
               Entry #{entry.entryNumber} — {formatTime(date)} UTC
+              {entry.assistantModel && (
+                <span className="ml-2 text-stone-400" title={entry.source}>
+                  ({entry.assistantModel})
+                </span>
+              )}
             </p>
             <div className="flex gap-2 mt-1.5 flex-wrap">
               {entry.tags.map((tag) => (

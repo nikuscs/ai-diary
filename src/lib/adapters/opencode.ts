@@ -46,13 +46,32 @@ export class OpenCodeAdapter implements ChatAdapter {
         project_path: string | null;
       }>;
 
-      return rows.map((row) => ({
-        id: row.id,
-        source: "opencode" as const,
-        startedAt: new Date(row.time_created),
-        project: row.project_path ?? row.directory,
-        filePath: this.dbPath,
-      }));
+      return rows.map((row) => {
+        let assistantModel: string | undefined;
+        try {
+          const msg = db
+            .prepare(`SELECT data FROM message WHERE session_id = ? AND data LIKE '%"model"%' LIMIT 1`)
+            .get(row.id) as { data: string } | undefined;
+          if (msg) {
+            const data = JSON.parse(msg.data);
+            const model = data.model;
+            if (typeof model === "object" && model?.modelID) {
+              assistantModel = model.modelID;
+            } else if (typeof model === "string") {
+              assistantModel = model;
+            }
+          }
+        } catch {}
+
+        return {
+          id: row.id,
+          source: "opencode" as const,
+          startedAt: new Date(row.time_created),
+          project: row.project_path ?? row.directory,
+          filePath: this.dbPath,
+          assistantModel,
+        };
+      });
     } finally {
       db.close();
     }

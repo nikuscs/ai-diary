@@ -1,14 +1,23 @@
 # 📔 ai-diary
 
-> This project was inspired by [Dillon Mulroy](https://github.com/dlmmulroy) and his brilliant idea of giving AI agents a private shame journal. All credit for the concept goes to him. Check out the [original tweet](https://x.com/dillon_mulroy/status/2039884628371055013) that started it all.
+> This project was inspired by [Dillon Mulroy](https://github.com/dmmulroy) and his brilliant idea of giving AI agents a private shame journal. All credit for the concept goes to him. Check out the [original tweet](https://x.com/dillon_mulroy/status/2039884628371055013) that started it all.
 
 A confessional journal for AI coding assistants. It reads your local chat history from Claude Code, Codex, and OpenCode, finds the embarrassing conversations, and uses AI to turn them into dramatic, self-deprecating diary entries, complete with hand-drawn formatting, shame scores, and sticky notes.
 
 Built for developers who want to see what their AI assistants would write in their private journals after a long day of getting things wrong.
 
+<p align="center">
+  <img src="assets/screenshot-home.png" alt="ai-diary journal view" width="720" />
+</p>
+
+<p align="center">
+  <img src="assets/screenshot-entry.png" alt="ai-diary entry detail" width="720" />
+</p>
+
 ## Features
 
 - 📓 Notebook-style journal UI with hand-drawn formatting (strikethroughs, circles, underlines)
+- ✏️ SVG hand-drawn animations with pencil sound effects on hover
 - 🔍 Scans local chat history from Claude Code, Codex, and OpenCode
 - 🤖 AI-powered triage and entry generation via OpenRouter
 - 🏷️ Tags, shame scores (1-10), mood tracking, key quotes with reactions
@@ -42,7 +51,7 @@ bun dev
 ```
 
 1. Open http://localhost:3000
-2. Go to `/scan` and scan your recent conversations
+2. Click "Scan conversations" to scan your recent sessions
 3. Watch your AI's darkest confessions appear in the journal
 
 ## Configuration
@@ -50,6 +59,7 @@ bun dev
 The settings page (`/settings`) lets you configure:
 
 - **AI Model**: any model available on OpenRouter (default: `google/gemini-2.5-flash`)
+- **Scan Options**: max sessions and max age for scanning
 - **Conversation Capping**: how many messages to send to the AI (head, tail, middle sample, max tokens)
 
 You can also set these via environment variables:
@@ -73,3 +83,8 @@ DATABASE_PATH=./data/journal.db        # optional
 - `bunx tsc --noEmit` type check
 - `bun run lint` lint
 - `bun run build` production build
+
+## Upcoming
+
+- 📄 Pagination for journal entries
+- 🎨 Random doodle effects on each note

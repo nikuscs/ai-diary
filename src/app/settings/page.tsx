@@ -1,11 +1,12 @@
 import { getConfig } from "@/lib/db/queries";
-import { DEFAULT_MODEL, DEFAULT_CAPPING_CONFIG } from "@/lib/config";
+import { DEFAULT_MODEL, DEFAULT_CAPPING_CONFIG, DEFAULT_SCAN_CONFIG } from "@/lib/config";
 import { SettingsForm } from "./settings-form";
 import Link from "next/link";
 
 export default async function SettingsPage() {
   const model = await getConfig("model", DEFAULT_MODEL);
   const capping = await getConfig("capping", DEFAULT_CAPPING_CONFIG);
+  const scan = await getConfig("scan", DEFAULT_SCAN_CONFIG);
 
   return (
     <div className="notebook-bg">
@@ -28,7 +29,7 @@ export default async function SettingsPage() {
           Configure the AI model and conversation scanning behavior.
         </p>
 
-        <SettingsForm model={model} capping={capping} />
+        <SettingsForm model={model} capping={capping} scan={scan} />
       </div>
     </div>
   );

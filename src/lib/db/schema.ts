@@ -21,6 +21,7 @@ export interface EntryTable {
   created_at: string;
   conversation_date: string;
   project: string | null;
+  assistant_model: string | null;
 }
 
 export interface EntryTagTable {

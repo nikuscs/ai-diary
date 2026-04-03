@@ -66,7 +66,8 @@ export async function scan(options?: {
         }
 
         const capped = capConversation(messages, cappingConfig);
-        const triage = await triageConversation(capped, modelId);
+        const sourceCtx = { source: session.source, assistantModel: session.assistantModel };
+        const triage = await triageConversation(capped, modelId, sourceCtx);
 
         if (!triage.worthy) {
           await markSessionScanned(session, hash, false, triage.reason);
@@ -74,7 +75,7 @@ export async function scan(options?: {
           continue;
         }
 
-        const { entry, meta } = await generateEntry(capped, modelId);
+        const { entry, meta } = await generateEntry(capped, modelId, sourceCtx);
 
         await insertEntry({
           session,

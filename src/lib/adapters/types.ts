@@ -12,6 +12,7 @@ export interface SessionInfo {
   startedAt: Date;
   project?: string;
   filePath: string;
+  assistantModel?: string;
 }
 
 export interface ChatMessage {

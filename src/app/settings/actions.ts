@@ -1,19 +1,39 @@
 "use server";
 
-import { setConfig } from "@/lib/db/queries";
+import { setConfig, getConfig } from "@/lib/db/queries";
+import { scan, type ScanResult } from "@/lib/scanner";
+import { DEFAULT_SCAN_CONFIG } from "@/lib/config";
 
-export async function saveSettings(_prev: unknown, formData: FormData) {
-  const model = String(formData.get("model") ?? "");
-  if (model) await setConfig("model", model);
+export async function saveSettings(data: {
+  model: string;
+  headMessages: number;
+  tailMessages: number;
+  middleSample: number;
+  maxTokens: number;
+  scanLimit: number;
+  scanMaxAgeDays: number;
+}) {
+  if (data.model) await setConfig("model", data.model);
 
-  const headMessages = Number(formData.get("headMessages"));
-  const tailMessages = Number(formData.get("tailMessages"));
-  const middleSample = Number(formData.get("middleSample"));
-  const maxTokens = Number(formData.get("maxTokens"));
+  await setConfig("capping", {
+    headMessages: data.headMessages,
+    tailMessages: data.tailMessages,
+    middleSample: data.middleSample,
+    maxTokens: data.maxTokens,
+  });
 
-  if (!isNaN(headMessages) && !isNaN(tailMessages) && !isNaN(middleSample) && !isNaN(maxTokens)) {
-    await setConfig("capping", { headMessages, tailMessages, middleSample, maxTokens });
-  }
+  await setConfig("scan", {
+    limit: data.scanLimit,
+    maxAgeDays: data.scanMaxAgeDays,
+  });
 
   return { saved: true };
+}
+
+export async function triggerScan(): Promise<ScanResult> {
+  const scanConfig = await getConfig("scan", DEFAULT_SCAN_CONFIG);
+  return scan({
+    limit: scanConfig.limit,
+    maxAgeDays: scanConfig.maxAgeDays,
+  });
 }

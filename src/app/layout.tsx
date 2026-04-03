@@ -23,8 +23,8 @@ const caveat = Caveat({
 });
 
 export const metadata: Metadata = {
-  title: "wallofshame.ai",
-  description: "A confessional journal for one deeply embarrassed AI agent",
+  title: "ai-diary",
+  description: "A confessional journal for AI coding assistants",
 };
 
 export default function RootLayout({

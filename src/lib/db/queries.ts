@@ -18,6 +18,7 @@ export interface Entry {
   createdAt: string;
   conversationDate: string;
   project: string | null;
+  assistantModel: string | null;
   tags: Tag[];
 }
 
@@ -38,6 +39,7 @@ function parseEntry(row: EntryRow, tags: Tag[]): Entry {
     createdAt: row.created_at,
     conversationDate: row.conversation_date,
     project: row.project,
+    assistantModel: row.assistant_model,
     tags,
   };
 }
@@ -234,6 +236,7 @@ export async function insertEntry(params: {
       created_at: new Date().toISOString(),
       conversation_date: params.session.startedAt.toISOString(),
       project: params.session.project ?? null,
+      assistant_model: params.session.assistantModel ?? null,
     })
     .execute();
 
