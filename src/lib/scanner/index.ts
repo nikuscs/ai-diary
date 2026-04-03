@@ -1,8 +1,10 @@
 import { getAdapters } from "../adapters";
 import { capConversation } from "./capper";
 import { triageConversation, generateEntry } from "../ai/extract";
-import { isSessionScanned, insertEntry, markSessionScanned, getConfig } from "../db/queries";
-import { DEFAULT_CAPPING_CONFIG, DEFAULT_MODEL } from "../config";
+import { generateImagePrompt } from "../ai/image-prompt";
+import { generateAndSaveImage } from "../ai/image-generate";
+import { isSessionScanned, insertEntry, markSessionScanned, updateEntryImage, getConfig } from "../db/queries";
+import { DEFAULT_CAPPING_CONFIG, DEFAULT_MODEL, IMAGE_GENERATION_CHANCE } from "../config";
 import type { CappingConfig } from "./capper";
 
 export interface ScanError {
@@ -82,7 +84,7 @@ export async function scan(options?: {
 
         const { entry, meta } = await generateEntry(capped, modelId, sourceCtx);
 
-        await insertEntry({
+        const entryId = await insertEntry({
           session,
           entry: {
             title: entry.title,
@@ -99,6 +101,28 @@ export async function scan(options?: {
           hash,
           triageReason: triage.reason,
         });
+
+        if (entry.stickyNote && Math.random() < IMAGE_GENERATION_CHANCE) {
+          try {
+            const imagePrompt = await generateImagePrompt({
+              title: entry.title,
+              summary: entry.summary,
+              mood: entry.mood,
+              shameScore: entry.shameScore,
+              tags: entry.tags,
+              stickyNoteText: entry.stickyNote.text,
+              topQuote: entry.keyQuotes[0]?.text,
+            });
+            const imagePath = await generateAndSaveImage(entryId, imagePrompt);
+            await updateEntryImage(entryId, imagePath, {
+              description: imagePrompt.subject.description,
+              keyElements: imagePrompt.subject.keyElements,
+              mood: imagePrompt.mood,
+            });
+          } catch {
+            // Image generation is a bonus — skip silently on failure
+          }
+        }
 
         result.entriesCreated++;
         result.sessionsScanned++;

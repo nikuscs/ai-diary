@@ -12,3 +12,8 @@ export const DEFAULT_SCAN_CONFIG = {
   limit: 3,
   maxAgeDays: 7,
 } as const;
+
+export const IMAGE_GENERATION_CHANCE = 0.3;
+export const IMAGE_PROMPT_MODEL = "google/gemini-2.5-flash";
+export const IMAGE_GENERATION_MODEL = "google/gemini-2.5-flash-image";
+export const IMAGES_DIR = "./data/images";

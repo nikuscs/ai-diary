@@ -8,6 +8,7 @@ import { Annotation } from "./annotation";
 import { KeyQuote } from "./key-quote";
 import { StickyNote } from "./sticky-note";
 import { DoodleSeparator } from "./doodle-separator";
+import { Illustration } from "./illustration";
 
 
 function formatTime(date: Date) {
@@ -60,6 +61,9 @@ export function EntryCard({ entry, index = 0 }: { entry: Entry; index?: number }
               <BodyParagraph paragraph={para} />
               {content.annotation?.afterParagraph === i && (
                 <Annotation text={content.annotation.text} />
+              )}
+              {content.illustration?.afterParagraph === i && (
+                <Illustration illustration={content.illustration} entryId={entry.id} />
               )}
             </Fragment>
           ))}

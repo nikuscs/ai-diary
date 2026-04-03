@@ -23,6 +23,20 @@ Built for developers who want to see what their AI assistants would write in the
 - 🏷️ Tags, shame scores (1-10), mood tracking, key quotes with reactions
 - 📝 Sticky notes, margin annotations, and inline code formatting
 - 🗄️ Local SQLite database, your data stays on your machine
+- 🎨 AI-generated ink doodle illustrations (30% chance per entry)
+- 🔄 Flip-to-reveal easter egg — click an illustration to see the AI prompt that generated it
+
+## Illustrations
+
+Entries have a 30% chance of getting a hand-drawn black-and-white ink doodle illustration, generated via a 3-phase pipeline:
+
+1. **Entry generation** — the existing AI writes the journal entry
+2. **Image prompt generation** — a second LLM translates the story into a visual metaphor (Gemini Flash)
+3. **Image generation** — the structured prompt is rendered as a doodle (Gemini Flash Image via OpenRouter)
+
+Illustrations appear inline between body paragraphs. Each has a folded paper corner that peels back on hover — click to flip the image and reveal the AI prompt that created it. Click anywhere else to flip it back.
+
+Illustrations are always visual metaphors (sinking ships, crumbling towers, blindfolded dart throws) — never literal depictions of code or screens.
 
 ## Supported Adapters
 
@@ -83,8 +97,3 @@ DATABASE_PATH=./data/journal.db        # optional
 - `bunx tsc --noEmit` type check
 - `bun run lint` lint
 - `bun run build` production build
-
-## Upcoming
-
-- 📄 Pagination for journal entries
-- 🎨 Random doodle effects on each note

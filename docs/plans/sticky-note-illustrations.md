@@ -57,7 +57,7 @@ Takes the entry metadata and produces a structured image prompt JSON. The LLM on
 {
   "subject": {
     "description": "A small figure standing triumphantly on a crumbling bridge, not noticing the last plank falling away behind them. A tiny flag planted at the peak reads nothing — it's blank. Below, a river of binary digits flows past.",
-    "key_elements": [
+    "keyElements": [
       "Tiny stick-figure developer with confident posture, oblivious expression",
       "Crumbling stone bridge, planks falling one by one into the void",
       "Blank victory flag planted at the midpoint",
@@ -78,7 +78,7 @@ Takes the entry metadata and produces a structured image prompt JSON. The LLM on
 
 ### Phase 3 — Image Generation (API call, no LLM)
 
-**Model:** `gemini-3-pro-image-preview` (Google AI directly, or via OpenRouter if supported)
+**Model:** `google/gemini-2.5-flash-image` (Google AI directly, or via OpenRouter if supported)
 
 Assembles the fixed style template + Phase 2 output into a single prompt, sends to the image model.
 
@@ -152,7 +152,7 @@ Do not include: color, photorealism, computer screens, text labels, speech bubbl
 {
   "subject": {
     "description": "A tiny figure pulling a lever labeled with a skull, launching a wrecking ball that swings toward a carefully built tower of blocks. The tower is mid-collapse, blocks scattering. A second tiny figure watches from a distance, holding a coffee cup, frozen.",
-    "key_elements": [
+    "keyElements": [
       "Stick-figure developer pulling an oversized lever with both hands, grimacing",
       "Wrecking ball mid-swing on a chain, aimed at a tower",
       "Tower of carefully stacked blocks mid-collapse, some blocks mid-air",
@@ -171,7 +171,7 @@ Do not include: color, photorealism, computer screens, text labels, speech bubbl
 {
   "subject": {
     "description": "A figure walking in a perfect circle of their own footprints in sand, head down, magnifying glass pointed at the ground. Behind them, a signpost with arrows pointing in every direction. A small crab watches from a rock.",
-    "key_elements": [
+    "keyElements": [
       "Developer walking in a circle, following their own footprints",
       "Oversized magnifying glass aimed at the ground",
       "Chaotic signpost with arrows pointing everywhere and nowhere",
@@ -190,7 +190,7 @@ Do not include: color, photorealism, computer screens, text labels, speech bubbl
 {
   "subject": {
     "description": "A figure blindfolded, throwing a dart over their shoulder, and it has landed dead-center on a bullseye. The figure is walking away not having noticed. A cat sits beside the dartboard looking unimpressed.",
-    "key_elements": [
+    "keyElements": [
       "Blindfolded stick-figure mid-walk-away, one hand still extended from the throw",
       "Dartboard with a single dart in the dead center",
       "Unimpressed cat sitting beside the dartboard, tail curled",
@@ -209,7 +209,7 @@ Do not include: color, photorealism, computer screens, text labels, speech bubbl
 {
   "subject": {
     "description": "A tiny figure on a sinking ship, frantically bailing water with a teacup while the ship tilts at 45 degrees. The ship's mast is a server rack antenna. Fish swim past at eye level. A life ring floats just out of reach.",
-    "key_elements": [
+    "keyElements": [
       "Panicked stick-figure bailing water with a comically small teacup",
       "Ship listing heavily, deck at 45 degrees",
       "Mast shaped like a server rack with a blinking antenna",
@@ -254,7 +254,7 @@ Do not include: color, photorealism, computer screens, text labels, speech bubbl
 // config.ts
 export const IMAGE_GENERATION_CHANCE = 0.3;
 export const IMAGE_PROMPT_MODEL = "google/gemini-2.5-flash";
-export const IMAGE_GENERATION_MODEL = "gemini-3-pro-image-preview";
+export const IMAGE_GENERATION_MODEL = "google/gemini-2.5-flash-image";
 ```
 
 ```env

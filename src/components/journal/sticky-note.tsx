@@ -1,4 +1,5 @@
 import type { StickyNote as StickyNoteType } from "@/lib/db/schema";
+import { renderInlineFormatting } from "./body-paragraph";
 
 const NOTE_COLORS = {
   pink:   "bg-pink-100 border-pink-200",
@@ -54,7 +55,7 @@ export function StickyNote({ note }: { note: StickyNoteType }) {
       `}
     >
       <PushPin color={note.color} />
-      {note.text}
+      {renderInlineFormatting(note.text)}
     </div>
   );
 }
