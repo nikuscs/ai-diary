@@ -1,0 +1,125 @@
+.notebook-bg {
+  background-color: #3e2723;
+  background-image:
+    radial-gradient(ellipse at 20% 50%, rgba(80, 50, 30, 0.3) 0%, transparent 70%),
+    radial-gradient(ellipse at 80% 20%, rgba(60, 40, 25, 0.2) 0%, transparent 60%);
+  min-height: 100vh;
+}
+
+.notebook-page {
+  background-color: #fdf6e3;
+  max-width: 780px;
+  margin: 0 auto;
+  padding: 2rem 3rem 3rem 6rem;
+  position: relative;
+  min-height: 100vh;
+  box-shadow:
+    0 0 40px rgba(0, 0, 0, 0.3),
+    inset 0 0 80px rgba(0, 0, 0, 0.03);
+
+  background-image:
+    repeating-linear-gradient(
+      transparent,
+      transparent 31px,
+      #e0d6c2 31px,
+      #e0d6c2 32px
+    );
+  background-size: 100% 32px;
+  background-position-y: 8px;
+}
+
+.notebook-page::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 76px;
+  width: 2px;
+  background-color: #c45a5a;
+  opacity: 0.5;
+}
+
+.tape {
+  position: absolute;
+  top: -8px;
+  right: 40px;
+  width: 80px;
+  height: 30px;
+  background-color: rgba(210, 190, 140, 0.6);
+  transform: rotate(2deg);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  z-index: 10;
+}
+
+/* Pencil strikethrough — hand-drawn red pencil line */
+.pencil-strike {
+  position: relative;
+  text-decoration: none;
+  color: inherit;
+  opacity: 0.75;
+}
+.pencil-strike::after {
+  content: "";
+  position: absolute;
+  left: -2px;
+  right: -2px;
+  top: 52%;
+  height: 0;
+  border-top: 2.5px solid #b33a3a;
+  border-radius: 2px;
+  transform: rotate(-0.4deg);
+  filter: url(#pencil-texture);
+  pointer-events: none;
+}
+
+/* Sticky note hover effect */
+.sticky-note {
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+.sticky-note:hover {
+  transform: rotate(-1deg) scale(1.03);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+/* Entry card subtle hover */
+.entry-card {
+  transition: background-color 0.15s ease;
+}
+.entry-card:hover {
+  background-color: rgba(253, 246, 227, 0.4);
+}
+
+/* Annotation wiggle on hover */
+.annotation {
+  transition: transform 0.15s ease;
+}
+.annotation:hover {
+  transform: translateX(4px);
+}
+
+/* Tag badge hover */
+.tag-badge {
+  transition: transform 0.15s ease, border-color 0.15s ease;
+}
+.tag-badge:hover {
+  transform: rotate(-2deg) scale(1.05);
+}
+
+/* Key quote hover - subtle indent */
+.key-quote {
+  transition: transform 0.15s ease, border-color 0.15s ease;
+}
+.key-quote:hover {
+  transform: translateX(4px);
+  border-color: rgba(168, 162, 158, 0.8);
+}
+
+@media (max-width: 640px) {
+  .notebook-page {
+    padding: 1.5rem 1.5rem 2rem 4rem;
+  }
+
+  .notebook-page::before {
+    left: 48px;
+  }
+}
