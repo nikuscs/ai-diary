@@ -14,7 +14,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { saveSettings, triggerReset } from "./actions";
 
 interface SettingsFormProps {
   model: string;
@@ -59,7 +58,11 @@ export function SettingsForm({ model, capping, scan }: SettingsFormProps) {
 
   async function onSubmit(data: FormValues) {
     setSaved(false);
-    await saveSettings(data);
+    await fetch("/api/settings", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(data),
+    });
     setSaved(true);
   }
 
@@ -170,7 +173,8 @@ export function SettingsForm({ model, capping, scan }: SettingsFormProps) {
               onClick={async () => {
                 setResetting(true);
                 try {
-                  const result = await triggerReset();
+                  const res = await fetch("/api/settings", { method: "DELETE" });
+                  const result = await res.json();
                   setResetResult(`Deleted ${result.deleted} entries.`);
                 } catch {
                   setResetResult("Reset failed.");

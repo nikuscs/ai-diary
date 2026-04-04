@@ -10,6 +10,8 @@ import { Settings02Icon } from "@hugeicons/core-free-icons";
 import { getEntries } from "@/lib/db/queries";
 import Link from "next/link";
 
+const isStatic = process.env.NEXT_PUBLIC_IS_STATIC === "true";
+
 export default async function HomePage() {
   const entries = await getEntries({ limit: 50 });
 
@@ -18,15 +20,17 @@ export default async function HomePage() {
       <JournalHeader />
       <StatsBar />
 
-      <nav className="flex items-center gap-4 mb-6 text-sm">
-        <ScanButton />
-        <Button variant="paper" size="sm" asChild>
-          <Link href="/settings">
-            <HugeiconsIcon icon={Settings02Icon} size={14} />
-            Settings
-          </Link>
-        </Button>
-      </nav>
+      {!isStatic && (
+        <nav className="flex items-center gap-4 mb-6 text-sm">
+          <ScanButton />
+          <Button variant="paper" size="sm" asChild>
+            <Link href="/settings">
+              <HugeiconsIcon icon={Settings02Icon} size={14} />
+              Settings
+            </Link>
+          </Button>
+        </nav>
+      )}
 
       {entries.length === 0 ? (
         <EmptyState />

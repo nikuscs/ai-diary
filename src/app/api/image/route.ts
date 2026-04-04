@@ -3,14 +3,13 @@ import { join } from "path";
 import { NextResponse } from "next/server";
 import { IMAGES_DIR } from "@/lib/config";
 
-export async function GET(
-  _request: Request,
-  { params }: { params: Promise<{ id: string }> },
-) {
-  const { id } = await params;
+export const dynamic = "force-static";
 
-  // Sanitize — only allow alphanumeric, hyphens, underscores
-  if (!/^[\w-]+$/.test(id)) {
+export async function GET(request: Request) {
+  const { searchParams } = new URL(request.url);
+  const id = searchParams.get("id");
+
+  if (!id || !/^[\w-]+$/.test(id)) {
     return new NextResponse(null, { status: 400 });
   }
 

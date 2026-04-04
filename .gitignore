@@ -38,6 +38,12 @@ yarn-error.log*
 # Database
 data/
 
+# Copied images for static export
+public/images/
+
+# Static export output
+out/
+
 # vercel
 .vercel
 

@@ -2,6 +2,12 @@ import { scan } from "@/lib/scanner";
 import { getConfig } from "@/lib/db/queries";
 import { DEFAULT_SCAN_CONFIG } from "@/lib/config";
 
+export const dynamic = "force-static";
+
+export async function GET() {
+  return new Response(null, { status: 405 });
+}
+
 export async function POST() {
   const scanConfig = await getConfig("scan", DEFAULT_SCAN_CONFIG);
 

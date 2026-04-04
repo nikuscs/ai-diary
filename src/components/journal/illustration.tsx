@@ -16,8 +16,6 @@ function stableIndex(id: string, max: number): number {
   return Math.abs(hash) % max;
 }
 
-// Page curl effect adapted from @joostkiens.
-// Multi-stop gradient + box-shadow, grows on hover.
 const CURL_ANGLE: Record<Corner, string> = {
   tl: "135deg",
   tr: "225deg",
@@ -130,7 +128,7 @@ export function Illustration({
             style={{ boxShadow: "0 1px 2px rgba(0,0,0,0.06)" }}
           />
           <img
-            src={`/api/images/${imageId}`}
+            src={`/images/${imageId}.png`}
             alt={illustration.prompt?.description || "Journal illustration"}
             className="w-full"
             style={{

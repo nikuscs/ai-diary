@@ -1,9 +1,14 @@
 import { notFound } from "next/navigation";
 import { NotebookPage } from "@/components/journal/notebook-page";
 import { EntryCard } from "@/components/journal/entry-card";
-import { getEntryById } from "@/lib/db/queries";
+import { getEntryById, getEntries } from "@/lib/db/queries";
 import Link from "next/link";
 import type { Metadata } from "next";
+
+export async function generateStaticParams() {
+  const entries = await getEntries({ limit: 200 });
+  return entries.map((e) => ({ id: e.id }));
+}
 
 interface PageProps {
   params: Promise<{ id: string }>;
