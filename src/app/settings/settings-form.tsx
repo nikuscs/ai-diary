@@ -14,7 +14,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { saveSettings } from "./actions";
+import { saveSettings, triggerReset } from "./actions";
 
 interface SettingsFormProps {
   model: string;
@@ -42,6 +42,9 @@ interface FormValues {
 
 export function SettingsForm({ model, capping, scan }: SettingsFormProps) {
   const [saved, setSaved] = useState(false);
+  const [confirmReset, setConfirmReset] = useState(false);
+  const [resetting, setResetting] = useState(false);
+  const [resetResult, setResetResult] = useState<string | null>(null);
   const { register, handleSubmit, setValue, formState: { isSubmitting } } = useForm<FormValues>({
     defaultValues: {
       model,
@@ -141,6 +144,57 @@ export function SettingsForm({ model, capping, scan }: SettingsFormProps) {
           <span className="font-[family-name:var(--font-caveat)] text-sm text-emerald-700">Saved!</span>
         )}
       </div>
+
+      <fieldset className="border-t border-red-200 pt-6 mt-8">
+        <legend className="font-[family-name:var(--font-playfair)] text-lg font-bold text-red-800 mb-2">
+          Danger Zone
+        </legend>
+        <p className="font-[family-name:var(--font-lora)] text-sm text-stone-500 mb-4">
+          Delete all journal entries, tags, and scan history. Conversations can be re-scanned afterwards.
+        </p>
+        {!confirmReset ? (
+          <Button
+            type="button"
+            variant="destructive"
+            onClick={() => setConfirmReset(true)}
+            data-testid="reset-data-button"
+          >
+            Reset All Data
+          </Button>
+        ) : (
+          <div className="flex items-center gap-3">
+            <Button
+              type="button"
+              variant="destructive"
+              disabled={resetting}
+              onClick={async () => {
+                setResetting(true);
+                try {
+                  const result = await triggerReset();
+                  setResetResult(`Deleted ${result.deleted} entries.`);
+                } catch {
+                  setResetResult("Reset failed.");
+                }
+                setResetting(false);
+                setConfirmReset(false);
+              }}
+              data-testid="reset-data-confirm"
+            >
+              {resetting ? "Deleting..." : "Yes, delete everything"}
+            </Button>
+            <Button
+              type="button"
+              variant="outline"
+              onClick={() => setConfirmReset(false)}
+            >
+              Cancel
+            </Button>
+          </div>
+        )}
+        {resetResult && (
+          <p className="font-[family-name:var(--font-caveat)] text-sm text-red-700 mt-2">{resetResult}</p>
+        )}
+      </fieldset>
     </form>
   );
 }

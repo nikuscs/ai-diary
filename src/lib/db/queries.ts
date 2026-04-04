@@ -301,3 +301,11 @@ export async function setConfig<T>(key: string, value: T): Promise<void> {
     )
     .execute();
 }
+
+export async function resetAllData(): Promise<{ deleted: number }> {
+  const db = await getDbReady();
+  const { numDeletedRows } = await db.deleteFrom("entries").executeTakeFirstOrThrow();
+  await db.deleteFrom("entry_tags").execute();
+  await db.deleteFrom("scanned_sessions").execute();
+  return { deleted: Number(numDeletedRows) };
+}

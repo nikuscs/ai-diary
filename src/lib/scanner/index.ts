@@ -20,10 +20,17 @@ export interface ScanResult {
   errors: ScanError[];
 }
 
+export interface ScanProgress {
+  current: number;
+  total: number;
+  status: string;
+}
+
 export async function scan(options?: {
   source?: string;
   limit?: number;
   maxAgeDays?: number;
+  onProgress?: (progress: ScanProgress) => void;
 }): Promise<ScanResult> {
   const adapters = getAdapters();
   const cappingConfig = await getConfig<CappingConfig>("capping", DEFAULT_CAPPING_CONFIG);

@@ -24,6 +24,9 @@ export function EntryCard({ entry, index = 0 }: { entry: Entry; index?: number }
   const content = entry.content;
   const date = new Date(entry.conversationDate);
 
+  const inlineQuotes = content.keyQuotes.filter((q) => q.afterParagraph != null);
+  const bottomQuotes = content.keyQuotes.filter((q) => q.afterParagraph == null);
+
   return (
     <article className="entry-card relative py-6" data-testid="entry-card">
       {index > 0 && <DoodleSeparator index={index} />}
@@ -62,6 +65,11 @@ export function EntryCard({ entry, index = 0 }: { entry: Entry; index?: number }
               {content.annotation?.afterParagraph === i && (
                 <Annotation text={content.annotation.text} />
               )}
+              {inlineQuotes
+                .filter((q) => q.afterParagraph === i)
+                .map((quote, qi) => (
+                  <KeyQuote key={`inline-${i}-${qi}`} quote={quote} index={qi} />
+                ))}
               {content.illustration?.afterParagraph === i && (
                 <Illustration illustration={content.illustration} entryId={entry.id} />
               )}
@@ -69,9 +77,9 @@ export function EntryCard({ entry, index = 0 }: { entry: Entry; index?: number }
           ))}
         </div>
 
-        {content.keyQuotes.length > 0 && (
+        {bottomQuotes.length > 0 && (
           <div className="mt-4 space-y-2">
-            {content.keyQuotes.map((quote, i) => (
+            {bottomQuotes.map((quote, i) => (
               <KeyQuote key={i} quote={quote} index={i} />
             ))}
           </div>

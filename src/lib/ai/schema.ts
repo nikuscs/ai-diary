@@ -18,6 +18,7 @@ export const JournalEntrySchema = z.object({
     speaker: z.enum(["user", "assistant"]),
     text: z.string(),
     reaction: z.string(),
+    afterParagraph: z.number().optional(),
   })).max(3),
   tags: z.array(z.enum([
     "critical", "shame", "confession", "delusion", "tantrum",

@@ -81,6 +81,7 @@ export interface KeyQuote {
   speaker: "user" | "assistant";
   text: string;
   reaction: string;
+  afterParagraph?: number;
 }
 
 export interface StickyNote {
