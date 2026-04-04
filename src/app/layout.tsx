@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Playfair_Display, Lora, Caveat } from "next/font/google";
+import { SoundPreloader } from "@/components/sound-preloader";
 import "./globals.css";
 import "@/styles/notebook.css";
 
@@ -65,6 +66,7 @@ export default function RootLayout({
             </filter>
           </defs>
         </svg>
+        <SoundPreloader />
         {children}
       </body>
     </html>
