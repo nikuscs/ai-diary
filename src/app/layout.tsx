@@ -7,20 +7,20 @@ import "@/styles/notebook.css";
 const playfair = Playfair_Display({
   subsets: ["latin"],
   variable: "--font-playfair",
-  weight: ["400", "700", "900"],
+  weight: ["700", "900"],
 });
 
 const lora = Lora({
   subsets: ["latin"],
   variable: "--font-lora",
-  weight: ["400", "500", "700"],
+  weight: ["400", "700"],
   style: ["normal", "italic"],
 });
 
 const caveat = Caveat({
   subsets: ["latin"],
   variable: "--font-caveat",
-  weight: ["400", "700"],
+  weight: ["400"],
 });
 
 export const metadata: Metadata = {
