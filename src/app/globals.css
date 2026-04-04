@@ -67,7 +67,11 @@
   body {
     @apply bg-background text-foreground;
   }
+  button {
+    @apply cursor-pointer select-none;
+  }
   html {
     @apply font-sans;
+    overscroll-behavior: none;
   }
 }
