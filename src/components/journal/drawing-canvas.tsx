@@ -5,8 +5,14 @@ import { usePathname } from "next/navigation";
 import { useDrawingMode } from "./drawing-context";
 import { playSound } from "@/lib/sounds";
 
+const PENCIL_COLOR = "rgba(80, 50, 30, 0.6)";
+const PENCIL_WIDTH = 1.5;
+const ERASER_COLOR = "rgba(253, 246, 227, 0.15)";
+const ERASER_WIDTH = 24;
+
 interface Stroke {
   points: { x: number; y: number }[];
+  type: "draw" | "erase";
 }
 
 function getStorageKey(path: string) {
@@ -16,7 +22,12 @@ function getStorageKey(path: string) {
 function loadStrokes(path: string): Stroke[] {
   try {
     const raw = localStorage.getItem(getStorageKey(path));
-    return raw ? JSON.parse(raw) : [];
+    if (!raw) return [];
+    const parsed = JSON.parse(raw);
+    return parsed.map((s: Stroke | { points: { x: number; y: number }[] }) => ({
+      ...s,
+      type: (s as Stroke).type ?? "draw",
+    }));
   } catch {
     return [];
   }
@@ -28,16 +39,34 @@ function saveStrokes(path: string, strokes: Stroke[]) {
 
 function drawStroke(ctx: CanvasRenderingContext2D, stroke: Stroke) {
   if (stroke.points.length < 2) return;
-  ctx.beginPath();
-  ctx.moveTo(stroke.points[0].x, stroke.points[0].y);
-  for (let i = 1; i < stroke.points.length; i++) {
-    const prev = stroke.points[i - 1];
-    const curr = stroke.points[i];
-    const mx = (prev.x + curr.x) / 2;
-    const my = (prev.y + curr.y) / 2;
-    ctx.quadraticCurveTo(prev.x, prev.y, mx, my);
+
+  ctx.globalCompositeOperation = "source-over";
+  ctx.lineCap = "round";
+  ctx.lineJoin = "round";
+
+  if (stroke.type === "erase") {
+    ctx.strokeStyle = ERASER_COLOR;
+    ctx.lineWidth = ERASER_WIDTH;
+    for (let i = 1; i < stroke.points.length; i++) {
+      ctx.beginPath();
+      ctx.moveTo(stroke.points[i - 1].x, stroke.points[i - 1].y);
+      ctx.lineTo(stroke.points[i].x, stroke.points[i].y);
+      ctx.stroke();
+    }
+  } else {
+    ctx.strokeStyle = PENCIL_COLOR;
+    ctx.lineWidth = PENCIL_WIDTH;
+    ctx.beginPath();
+    ctx.moveTo(stroke.points[0].x, stroke.points[0].y);
+    for (let i = 1; i < stroke.points.length; i++) {
+      const prev = stroke.points[i - 1];
+      const curr = stroke.points[i];
+      const mx = (prev.x + curr.x) / 2;
+      const my = (prev.y + curr.y) / 2;
+      ctx.quadraticCurveTo(prev.x, prev.y, mx, my);
+    }
+    ctx.stroke();
   }
-  ctx.stroke();
 }
 
 export function DrawingCanvas() {
@@ -56,11 +85,6 @@ export function DrawingCanvas() {
     const ctx = canvas.getContext("2d");
     if (!ctx) return;
     ctx.clearRect(0, 0, canvas.width, canvas.height);
-    ctx.strokeStyle = "rgba(80, 50, 30, 0.6)";
-    ctx.lineWidth = 1.5;
-    ctx.lineCap = "round";
-    ctx.lineJoin = "round";
-    ctx.globalCompositeOperation = "source-over";
     for (const stroke of strokesRef.current) {
       drawStroke(ctx, stroke);
     }
@@ -124,17 +148,7 @@ export function DrawingCanvas() {
       const pt = getPoint(e);
       if (!pt) return;
       drawing.current = true;
-      currentStroke.current = { points: [pt] };
-
-      if (mode === "erase") {
-        const ctx = canvasRef.current?.getContext("2d");
-        if (ctx) {
-          ctx.globalCompositeOperation = "destination-out";
-          ctx.lineWidth = 40;
-          ctx.lineCap = "round";
-          ctx.lineJoin = "round";
-        }
-      }
+      currentStroke.current = { points: [pt], type: mode === "draw" ? "draw" : "erase" };
     };
 
     const onMove = (e: PointerEvent) => {
@@ -147,12 +161,16 @@ export function DrawingCanvas() {
       const ctx = canvas?.getContext("2d");
       if (!ctx) return;
 
+      ctx.globalCompositeOperation = "source-over";
+      ctx.lineCap = "round";
+      ctx.lineJoin = "round";
+
       if (mode === "draw") {
-        ctx.globalCompositeOperation = "source-over";
-        ctx.strokeStyle = "rgba(80, 50, 30, 0.6)";
-        ctx.lineWidth = 1.5;
-        ctx.lineCap = "round";
-        ctx.lineJoin = "round";
+        ctx.strokeStyle = PENCIL_COLOR;
+        ctx.lineWidth = PENCIL_WIDTH;
+      } else {
+        ctx.strokeStyle = ERASER_COLOR;
+        ctx.lineWidth = ERASER_WIDTH;
       }
 
       const points = currentStroke.current.points;
@@ -170,27 +188,12 @@ export function DrawingCanvas() {
       if (!drawing.current || !currentStroke.current) return;
       drawing.current = false;
 
-      if (mode === "draw" && currentStroke.current.points.length >= 2) {
+      if (currentStroke.current.points.length >= 2) {
         strokesRef.current.push(currentStroke.current);
         saveStrokes(pathname, strokesRef.current);
         setStrokeCount(strokesRef.current.length);
         redraw();
-        playSound("/sounds/pencil-strike.mp3");
-      } else if (mode === "erase") {
-        const erasePath = currentStroke.current.points;
-        if (erasePath.length >= 2) {
-          const before = strokesRef.current.length;
-          strokesRef.current = strokesRef.current.filter((stroke) =>
-            !stroke.points.some((pt) =>
-              erasePath.some((ep) => Math.hypot(pt.x - ep.x, pt.y - ep.y) < 40)
-            )
-          );
-          if (strokesRef.current.length !== before) {
-            saveStrokes(pathname, strokesRef.current);
-            setStrokeCount(strokesRef.current.length);
-          }
-          redraw();
-        }
+        if (mode === "draw") playSound("/sounds/pencil-strike.mp3");
       }
       currentStroke.current = null;
     };

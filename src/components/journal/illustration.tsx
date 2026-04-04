@@ -124,6 +124,7 @@ export function Illustration({
             className="absolute -top-2.5 left-1/2 -translate-x-1/2 w-20 h-5 bg-amber-100/40 rotate-[1deg] z-10"
             style={{ boxShadow: "0 1px 2px rgba(0,0,0,0.06)" }}
           />
+          {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
             src={`/images/${imageId}.png`}
             alt={illustration.prompt?.description || "Journal illustration"}
