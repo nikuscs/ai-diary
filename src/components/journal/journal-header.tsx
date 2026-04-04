@@ -2,7 +2,7 @@ import { HandStrike } from "./hand-strike";
 
 export function JournalHeader() {
   return (
-    <header className="mb-2">
+    <header className="mb-2" data-testid="journal-header">
       <p className="font-[family-name:var(--font-caveat)] text-base text-stone-400 italic">
         private — do not read (I mean it)
       </p>

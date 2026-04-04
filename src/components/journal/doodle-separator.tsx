@@ -8,7 +8,7 @@ export function DoodleSeparator({ index = 0 }: { index?: number }) {
   const d = SQUIGGLES[index % SQUIGGLES.length];
 
   return (
-    <div className="flex justify-center py-1" aria-hidden="true">
+    <div className="flex justify-center py-1" aria-hidden="true" data-testid="doodle-separator">
       <svg width="150" height="8" viewBox="0 0 150 8" fill="none" className="opacity-25">
         <path
           d={d}

@@ -10,6 +10,7 @@ export function KeyQuote({ quote, index = 0 }: { quote: KeyQuoteType; index?: nu
 
   return (
     <div
+      data-testid="key-quote"
       className={`paper-btn bg-white/80 border border-stone-300/50 shadow-[2px_3px_6px_rgba(0,0,0,0.08)] px-4 py-3 my-3 ${rotation} transition-all duration-200 hover:shadow-[2px_4px_10px_rgba(0,0,0,0.12)] hover:scale-[1.01]`}
     >
       <div className="flex items-start gap-2.5">

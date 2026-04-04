@@ -25,7 +25,7 @@ export function EntryCard({ entry, index = 0 }: { entry: Entry; index?: number }
   const date = new Date(entry.conversationDate);
 
   return (
-    <article className="entry-card relative py-6">
+    <article className="entry-card relative py-6" data-testid="entry-card">
       {index > 0 && <DoodleSeparator index={index} />}
       <div className="absolute -left-16 top-6 w-14">
         <DateColumn date={date} />
@@ -51,11 +51,11 @@ export function EntryCard({ entry, index = 0 }: { entry: Entry; index?: number }
           <ShameIndicator score={entry.shameScore} />
         </div>
 
-        <h2 className="font-[family-name:var(--font-caveat)] text-4xl mt-4 text-stone-900">
+        <h2 className="font-[family-name:var(--font-caveat)] text-4xl mt-4 text-stone-900" data-testid="entry-title">
           {entry.title}
         </h2>
 
-        <div className="font-[family-name:var(--font-lora)] text-[17px] text-stone-900 mt-4">
+        <div className="font-[family-name:var(--font-lora)] text-[17px] text-stone-900 mt-4" data-testid="entry-body">
           {content.body.map((para, i) => (
             <Fragment key={i}>
               <BodyParagraph paragraph={para} />

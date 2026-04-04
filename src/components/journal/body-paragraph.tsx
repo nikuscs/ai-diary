@@ -56,25 +56,25 @@ export function BodyParagraph({ paragraph }: { paragraph: BodyParagraphType }) {
   switch (paragraph.type) {
     case "paragraph":
       return (
-        <p className="mb-4 leading-8">
+        <p className="mb-4 leading-8" data-testid="body-paragraph">
           {renderInlineFormatting(paragraph.content)}
         </p>
       );
     case "quote":
       return (
-        <blockquote className="pl-4 border-l-2 border-stone-400 mb-4 text-stone-800 italic leading-8">
+        <blockquote className="pl-4 border-l-2 border-stone-400 mb-4 text-stone-800 italic leading-8" data-testid="body-quote">
           {renderInlineFormatting(paragraph.content)}
         </blockquote>
       );
     case "code":
       return (
-        <pre className="font-mono text-[13px] text-red-900/80 bg-amber-50/80 border-l-2 border-red-800/30 pl-4 pr-4 py-3 mb-4 overflow-x-auto whitespace-pre-wrap leading-relaxed" style={{ transform: "rotate(-0.3deg)" }}>
+        <pre className="font-mono text-[13px] text-red-900/80 bg-amber-50/80 border-l-2 border-red-800/30 pl-4 pr-4 py-3 mb-4 overflow-x-auto whitespace-pre-wrap leading-relaxed" data-testid="body-code" style={{ transform: "rotate(-0.3deg)" }}>
           {paragraph.content}
         </pre>
       );
     case "aside":
       return (
-        <p className="font-[family-name:var(--font-caveat)] text-xl italic text-stone-800 mb-4 leading-relaxed">
+        <p className="font-[family-name:var(--font-caveat)] text-xl italic text-stone-800 mb-4 leading-relaxed" data-testid="body-aside">
           {renderInlineFormatting(paragraph.content)}
         </p>
       );

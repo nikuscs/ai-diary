@@ -45,6 +45,7 @@ function PushPin({ color }: { color: keyof typeof PIN_COLORS }) {
 export function StickyNote({ note }: { note: StickyNoteType }) {
   return (
     <div
+      data-testid="sticky-note"
       className={`
         sticky-note relative
         ${NOTE_COLORS[note.color]}

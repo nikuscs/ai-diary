@@ -16,6 +16,7 @@ const TAG_STYLES: Record<Tag, string> = {
 export function TagBadge({ tag }: { tag: Tag }) {
   return (
     <span
+      data-testid="tag-badge"
       className={`tag-badge font-[family-name:var(--font-caveat)] text-[15px] leading-none px-2.5 py-1 rounded-sm shadow-sm ${TAG_STYLES[tag]}`}
     >
       {tag}

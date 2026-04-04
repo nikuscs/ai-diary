@@ -8,7 +8,7 @@ export function DateColumn({ date }: { date: Date }) {
   const dot2 = { top: 28 + ((seed * 3) % 7), left: 30 + ((seed * 7) % 12) };
 
   return (
-    <div className="text-center pt-1 relative">
+    <div className="text-center pt-1 relative" data-testid="date-column">
       <div className="font-[family-name:var(--font-lora)] text-xs font-bold tracking-wider text-red-800">
         {month}
       </div>

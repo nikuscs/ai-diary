@@ -7,7 +7,7 @@ function getShameColor(score: number): string {
 
 export function ShameIndicator({ score }: { score: number }) {
   return (
-    <div className="flex items-center gap-2">
+    <div className="flex items-center gap-2" data-testid="shame-indicator">
       <div
         className={`w-2.5 h-2.5 rounded-full ${getShameColor(score)}`}
         title={`Shame score: ${score}/10`}

@@ -30,7 +30,7 @@ export function ScanButton() {
 
   if (state === "scanning") {
     return (
-      <span className="inline-flex items-center gap-2 h-8 text-xs">
+      <span data-testid="scan-button" className="inline-flex items-center gap-2 h-8 text-xs">
         <span className="w-3.5 h-3.5 border-2 border-stone-400 border-t-stone-800 rounded-full animate-spin" />
         <span className="text-stone-600">Scanning...</span>
       </span>
@@ -39,7 +39,7 @@ export function ScanButton() {
 
   if (state === "done") {
     return (
-      <span className="inline-flex items-center gap-2 h-8 text-xs">
+      <span data-testid="scan-button" className="inline-flex items-center gap-2 h-8 text-xs">
         {result ? (
           <span className="text-stone-600">+{result.entriesCreated} entries</span>
         ) : (
@@ -53,7 +53,7 @@ export function ScanButton() {
   }
 
   return (
-    <Button variant="paper" size="sm" onClick={handleScan}>
+    <Button variant="paper" size="sm" data-testid="scan-button" onClick={handleScan}>
       <HugeiconsIcon icon={QuillWrite01Icon} size={14} />
       Scan conversations
     </Button>

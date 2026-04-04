@@ -102,6 +102,7 @@ export function Illustration({
   return (
     <figure
       ref={containerRef}
+      data-testid="illustration"
       className="my-8 flex justify-center"
       style={{ perspective: "1000px" }}
       onMouseEnter={() => setHovered(true)}
@@ -130,7 +131,7 @@ export function Illustration({
           />
           <img
             src={`/api/images/${imageId}`}
-            alt=""
+            alt={illustration.prompt?.description || "Journal illustration"}
             className="w-full"
             style={{
               filter: "grayscale(0.6) sepia(0.35) saturate(0.5) contrast(1.1) brightness(1.05)",
