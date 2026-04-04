@@ -94,6 +94,8 @@ bun run export
 
 This builds the entire journal as static HTML into `out/`. Images are copied from `~/.config/ai-diary/images/` into the output. The scan button and settings page are hidden since they require a running server.
 
+> **Warning:** Journal entries may contain sensitive information (API keys, file paths, internal URLs, credentials) that LLMs summarized from your conversations. Review your entries before deploying publicly.
+
 ### Deploy to Cloudflare Pages
 
 ```bash
