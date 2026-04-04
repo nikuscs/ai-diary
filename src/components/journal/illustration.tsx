@@ -1,7 +1,8 @@
 "use client";
 
-import { useState, useEffect, useCallback, useRef } from "react";
+import { useState, useEffect, useRef } from "react";
 import type { JournalEntryContent } from "@/lib/db/schema";
+import { playSound } from "@/lib/sounds";
 
 type Illustration = NonNullable<JournalEntryContent["illustration"]>;
 
@@ -62,11 +63,7 @@ export function Illustration({
   const curlStyle = getCurlStyle(corner, curlSize);
   if (hovered) curlStyle.boxShadow = "0 0 10px rgba(0,0,0,0.3)";
 
-  const playSound = useCallback(() => {
-    const audio = new Audio("/sounds/pencil-strike.mp3");
-    audio.volume = 0.3;
-    audio.play().catch(() => {});
-  }, []);
+  const play = () => playSound("/sounds/pencil-strike.mp3");
 
   useEffect(() => {
     const el = containerRef.current;
@@ -76,12 +73,12 @@ export function Illustration({
       e.preventDefault();
       e.stopPropagation();
       setFlipped((f) => !f);
-      playSound();
+      play();
     };
 
     el.addEventListener("click", handler, true);
     return () => el.removeEventListener("click", handler, true);
-  }, [hasPrompt, playSound]);
+  }, [hasPrompt]);
 
   useEffect(() => {
     if (!flipped) return;
@@ -90,12 +87,12 @@ export function Illustration({
         e.preventDefault();
         e.stopPropagation();
         setFlipped(false);
-        playSound();
+        play();
       }
     };
     window.addEventListener("click", handler, true);
     return () => window.removeEventListener("click", handler, true);
-  }, [flipped, playSound]);
+  }, [flipped]);
 
   return (
     <figure
