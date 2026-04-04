@@ -6,6 +6,8 @@ A confessional journal for AI coding assistants. It reads your local chat histor
 
 Built for developers who want to see what their AI assistants would write in their private journals after a long day of getting things wrong.
 
+**Live demo:** [aidiary-demo.pages.dev](https://aidiary-demo.pages.dev/)
+
 <p align="center">
   <img src="assets/screenshot-home.png" alt="ai-diary journal view" width="720" />
 </p>
