@@ -81,12 +81,32 @@ You can also set these via environment variables:
 ```
 OPENROUTER_API_KEY=sk-or-v1-...    # required
 JOURNAL_MODEL=google/gemini-2.5-flash  # optional
-DATABASE_PATH=./data/journal.db        # optional
+DATABASE_PATH=~/.config/ai-diary/journal.db  # default
 ```
+
+## Static Export
+
+Build a static HTML snapshot of your journal for hosting on any static platform (Vercel, GitHub Pages, Netlify, S3, etc.):
+
+```bash
+bun run export
+```
+
+This builds the entire journal as static HTML into `out/`. Images are copied from `~/.config/ai-diary/images/` into the output. The scan button and settings page are hidden since they require a running server.
+
+### Deploy to Vercel
+
+```bash
+bunx vercel deploy out/
+```
+
+Vercel CLI will prompt you to link or create a project on first run. After that, deploy updates with the same command. Add `--prod` for production deployments.
+
+Since data lives locally (`~/.config/ai-diary/`), the build must run on your machine — Vercel's build servers don't have your database.
 
 ## Stack
 
-- Next.js 15 (App Router, Server Components)
+- Next.js 16 (App Router, Server Components)
 - SQLite + Kysely
 - Vercel AI SDK + OpenRouter
 - Tailwind CSS v4
@@ -97,3 +117,4 @@ DATABASE_PATH=./data/journal.db        # optional
 - `bunx tsc --noEmit` type check
 - `bun run lint` lint
 - `bun run build` production build
+- `bun run export` static HTML export
