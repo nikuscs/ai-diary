@@ -4,6 +4,7 @@ import { StatsBar } from "@/components/journal/stats-bar";
 import { EntryCard } from "@/components/journal/entry-card";
 import { EmptyState } from "@/components/journal/empty-state";
 import { ScanButton } from "@/components/journal/scan-button";
+import { DrawingToolbar } from "@/components/journal/drawing-toolbar";
 import { Button } from "@/components/ui/button";
 import { HugeiconsIcon } from "@hugeicons/react";
 import { Settings02Icon } from "@hugeicons/core-free-icons";
@@ -20,26 +21,27 @@ export default async function HomePage() {
       <JournalHeader />
       <StatsBar />
 
-      {!isStatic && (
-        <nav className="flex items-center gap-4 mb-6 text-sm">
-          <ScanButton />
-          <Button variant="paper" size="sm" asChild>
-            <Link href="/settings">
-              <HugeiconsIcon icon={Settings02Icon} size={14} />
-              Settings
-            </Link>
-          </Button>
-        </nav>
-      )}
+      <nav className="flex items-center gap-4 mb-6 text-sm">
+        {!isStatic && (
+          <>
+            <ScanButton />
+            <Button variant="paper" size="sm" asChild>
+              <Link href="/settings">
+                <HugeiconsIcon icon={Settings02Icon} size={14} />
+                Settings
+              </Link>
+            </Button>
+          </>
+        )}
+        <DrawingToolbar />
+      </nav>
 
       {entries.length === 0 ? (
         <EmptyState />
       ) : (
         <div>
           {entries.map((entry, i) => (
-            <Link key={entry.id} href={`/entry/${entry.id}`} className="block hover:bg-stone-50/30 -mx-2 px-2 rounded transition-colors">
-              <EntryCard entry={entry} index={i} />
-            </Link>
+            <EntryCard key={entry.id} entry={entry} index={i} />
           ))}
         </div>
       )}

@@ -1,6 +1,7 @@
 import { notFound } from "next/navigation";
 import { NotebookPage } from "@/components/journal/notebook-page";
 import { EntryCard } from "@/components/journal/entry-card";
+import { DrawingToolbar } from "@/components/journal/drawing-toolbar";
 import { getEntryById, getEntries } from "@/lib/db/queries";
 import Link from "next/link";
 import type { Metadata } from "next";
@@ -31,13 +32,14 @@ export default async function EntryPage({ params }: PageProps) {
 
   return (
     <NotebookPage>
-      <nav className="mb-6">
+      <nav className="flex items-center gap-4 mb-6 text-sm">
         <Link
           href="/"
-          className="font-[family-name:var(--font-lora)] text-sm text-stone-500 hover:text-stone-800 underline underline-offset-2 decoration-stone-300 hover:decoration-stone-500 transition-colors"
+          className="font-[family-name:var(--font-lora)] text-stone-500 hover:text-stone-800 underline underline-offset-2 decoration-stone-300 hover:decoration-stone-500 transition-colors"
         >
           &larr; Back to journal
         </Link>
+        <DrawingToolbar />
       </nav>
 
       <EntryCard entry={entry} />

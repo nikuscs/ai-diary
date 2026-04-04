@@ -68,10 +68,22 @@
     @apply bg-background text-foreground;
   }
   button {
-    @apply cursor-pointer select-none;
+    @apply cursor-pointer;
   }
   html {
     @apply font-sans;
     overscroll-behavior: none;
   }
+}
+
+.drawing-mode-draw,
+.drawing-mode-draw * {
+  cursor: url("/cursors/pencil.svg") 1 22, crosshair !important;
+  user-select: none !important;
+}
+
+.drawing-mode-erase,
+.drawing-mode-erase * {
+  cursor: url("/cursors/eraser.svg") 12 12, crosshair !important;
+  user-select: none !important;
 }

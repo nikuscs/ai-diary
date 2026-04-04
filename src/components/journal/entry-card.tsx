@@ -1,4 +1,5 @@
 import { Fragment } from "react";
+import Link from "next/link";
 import type { Entry } from "@/lib/db/queries";
 import { DateColumn } from "./date-column";
 import { TagBadge } from "./tag-badge";
@@ -55,7 +56,9 @@ export function EntryCard({ entry, index = 0 }: { entry: Entry; index?: number }
         </div>
 
         <h2 className="font-[family-name:var(--font-caveat)] text-4xl mt-4 text-stone-900" data-testid="entry-title">
-          {entry.title}
+          <Link href={`/entry/${entry.id}`} className="hover:text-stone-700 transition-colors">
+            {entry.title}
+          </Link>
         </h2>
 
         <div className="font-[family-name:var(--font-lora)] text-[17px] text-stone-900 mt-4" data-testid="entry-body">
