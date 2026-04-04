@@ -3,6 +3,7 @@ import type { Selectable } from "kysely";
 import { getDbReady } from "./index";
 import type { Tag, EntryTable, JournalEntryContent, AIResponseMeta, Mood } from "./schema";
 import type { SessionInfo } from "../adapters/types";
+import { redact } from "../redact";
 
 export interface Entry {
   id: string;
@@ -214,10 +215,10 @@ export async function insertEntry(params: {
   const entryNumber = (Number(maxResult.max) || 0) + 1;
 
   const content: JournalEntryContent = {
-    body: params.entry.body,
-    keyQuotes: params.entry.keyQuotes,
-    stickyNote: params.entry.stickyNote,
-    annotation: params.entry.annotation,
+    body: params.entry.body.map((p) => ({ ...p, content: redact(p.content) })),
+    keyQuotes: params.entry.keyQuotes.map((q) => ({ ...q, text: redact(q.text), reaction: redact(q.reaction) })),
+    stickyNote: params.entry.stickyNote ? { ...params.entry.stickyNote, text: redact(params.entry.stickyNote.text) } : null,
+    annotation: params.entry.annotation ? { ...params.entry.annotation, text: redact(params.entry.annotation.text) } : null,
   };
 
   await db
@@ -227,8 +228,8 @@ export async function insertEntry(params: {
       entry_number: entryNumber,
       session_id: params.session.id,
       source: params.session.source as "claude-code" | "codex" | "opencode",
-      title: params.entry.title,
-      summary: params.entry.summary,
+      title: redact(params.entry.title),
+      summary: redact(params.entry.summary),
       shame_score: params.entry.shameScore,
       mood: params.entry.mood,
       content: JSON.stringify(content),
