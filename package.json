@@ -7,7 +7,9 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
-    "export": "bunx tsx scripts/copy-images.ts && STATIC_EXPORT=true bun next build"
+    "export": "bunx tsx scripts/copy-images.ts && STATIC_EXPORT=true bun next build",
+    "deploy:cloudflare": "bun run export && bunx wrangler pages deploy out/",
+    "deploy:vercel": "bun run export && bunx vercel deploy out/ --prod"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.2.2",
