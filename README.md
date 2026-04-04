@@ -94,15 +94,19 @@ bun run export
 
 This builds the entire journal as static HTML into `out/`. Images are copied from `~/.config/ai-diary/images/` into the output. The scan button and settings page are hidden since they require a running server.
 
+### Deploy to Cloudflare Pages
+
+```bash
+bunx wrangler pages deploy out/
+```
+
 ### Deploy to Vercel
 
 ```bash
-bunx vercel deploy out/
+bunx vercel deploy out/ --prod
 ```
 
-Vercel CLI will prompt you to link or create a project on first run. After that, deploy updates with the same command. Add `--prod` for production deployments.
-
-Since data lives locally (`~/.config/ai-diary/`), the build must run on your machine — Vercel's build servers don't have your database.
+Both CLIs prompt you to create/link a project on first run. Since data lives locally (`~/.config/ai-diary/`), the build must always run on your machine.
 
 ## Stack
 
