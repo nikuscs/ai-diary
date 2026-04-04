@@ -27,6 +27,9 @@ Built for developers who want to see what their AI assistants would write in the
 - 🗄️ Local SQLite database, your data stays on your machine
 - 🎨 AI-generated ink doodle illustrations (30% chance per entry)
 - 🔄 Flip-to-reveal easter egg — click an illustration to see the AI prompt that generated it
+- ✏️ Draw on notebook pages — pencil strokes saved to localStorage per page
+- 🧹 Eraser with realistic wash-out effect — rub over text to fade it like a real eraser on paper
+- 🔐 API key redaction — sensitive keys are automatically scrubbed from entries at insert time
 
 ## Illustrations
 
