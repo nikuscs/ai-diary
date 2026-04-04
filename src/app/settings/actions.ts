@@ -1,8 +1,6 @@
 "use server";
 
-import { setConfig, getConfig, resetAllData } from "@/lib/db/queries";
-import { scan, type ScanResult } from "@/lib/scanner";
-import { DEFAULT_SCAN_CONFIG } from "@/lib/config";
+import { setConfig, resetAllData } from "@/lib/db/queries";
 
 export async function saveSettings(data: {
   model: string;
@@ -28,14 +26,6 @@ export async function saveSettings(data: {
   });
 
   return { saved: true };
-}
-
-export async function triggerScan(): Promise<ScanResult> {
-  const scanConfig = await getConfig("scan", DEFAULT_SCAN_CONFIG);
-  return scan({
-    limit: scanConfig.limit,
-    maxAgeDays: scanConfig.maxAgeDays,
-  });
 }
 
 export async function triggerReset(): Promise<{ deleted: number }> {

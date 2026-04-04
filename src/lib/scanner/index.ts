@@ -61,6 +61,8 @@ export async function scan(options?: {
       ? allSessions.filter((s) => s.startedAt >= cutoff)
       : allSessions;
     result.sessionsFound += sessions.length;
+    const total = options?.limit ? Math.min(sessions.length, options.limit) : sessions.length;
+    let processed = 0;
 
     for (const session of sessions) {
       if (options?.limit && result.sessionsScanned >= options.limit) break;
@@ -69,6 +71,8 @@ export async function scan(options?: {
         const hash = await adapter.getSessionHash(session.id);
         if (await isSessionScanned(session.id, hash)) {
           result.sessionsSkipped++;
+          processed++;
+          options?.onProgress?.({ current: processed, total, status: "Skipping scanned" });
           continue;
         }
 
@@ -78,6 +82,9 @@ export async function scan(options?: {
           result.sessionsScanned++;
           continue;
         }
+
+        processed++;
+        options?.onProgress?.({ current: processed, total, status: "Triaging" });
 
         const capped = capConversation(messages, cappingConfig);
         const sourceCtx = { source: session.source, assistantModel: session.assistantModel };
@@ -89,6 +96,7 @@ export async function scan(options?: {
           continue;
         }
 
+        options?.onProgress?.({ current: processed, total, status: "Writing entry" });
         const { entry, meta } = await generateEntry(capped, modelId, sourceCtx);
 
         const entryId = await insertEntry({

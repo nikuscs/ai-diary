@@ -5,21 +5,48 @@ import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { HugeiconsIcon } from "@hugeicons/react";
 import { QuillWrite01Icon } from "@hugeicons/core-free-icons";
-import { triggerScan } from "@/app/settings/actions";
 import type { ScanResult } from "@/lib/scanner";
 
 export function ScanButton() {
   const router = useRouter();
   const [state, setState] = useState<"idle" | "scanning" | "done">("idle");
+  const [progress, setProgress] = useState("");
   const [result, setResult] = useState<ScanResult | null>(null);
   const [error, setError] = useState<string | null>(null);
 
   async function handleScan() {
     setState("scanning");
+    setProgress("Starting...");
     setError(null);
     try {
-      const scanResult = await triggerScan();
-      setResult(scanResult);
+      const res = await fetch("/api/scan", { method: "POST" });
+      if (!res.ok || !res.body) throw new Error("Scan request failed");
+
+      const reader = res.body.getReader();
+      const decoder = new TextDecoder();
+      let buffer = "";
+
+      while (true) {
+        const { done, value } = await reader.read();
+        if (done) break;
+        buffer += decoder.decode(value, { stream: true });
+
+        const lines = buffer.split("\n");
+        buffer = lines.pop() || "";
+
+        for (const line of lines) {
+          if (!line.trim()) continue;
+          const msg = JSON.parse(line);
+          if (msg.type === "progress") {
+            setProgress(`${msg.current}/${msg.total} — ${msg.status}`);
+          } else if (msg.type === "done") {
+            setResult(msg);
+          } else if (msg.type === "error") {
+            setError(msg.error);
+          }
+        }
+      }
+
       setState("done");
       router.refresh();
     } catch (caught) {
@@ -32,7 +59,7 @@ export function ScanButton() {
     return (
       <span data-testid="scan-button" className="inline-flex items-center gap-2 h-8 text-xs">
         <span className="w-3.5 h-3.5 border-2 border-stone-400 border-t-stone-800 rounded-full animate-spin" />
-        <span className="text-stone-600">Scanning...</span>
+        <span className="text-stone-600">{progress}</span>
       </span>
     );
   }
